@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\Type;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -22,7 +23,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('admin.projects.create');
+        $types = Type::all();
+        return view('admin.projects.create', compact('types'));
     }
 
     /**
@@ -38,13 +40,15 @@ class ProjectController extends Controller
             'html_url' => 'nullable|string',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'type_id' => 'required|exists:types,id',
         ]);
     
         $project = Project::create([
             'name' => $request->input('name'),
             'owner_avatar_url' => $request->input('owner_avatar_url'),
             'html_url' => $request->input('html_url'),
-            'description' => $request->input('description'),        
+            'description' => $request->input('description'),
+            'type_id' => $request->input('type_id'),
         ]);
 
         if ($request->hasFile('image')) {
@@ -68,7 +72,8 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('admin.projects.edit', compact('project'));
+        $types = Type::all();
+        return view('admin.projects.edit', compact('project', 'types'));
     }
 
     /**
@@ -88,6 +93,7 @@ class ProjectController extends Controller
         $project->update([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
+            'type_id' => $request->input('type_id'),    
         ]);
 
         return redirect()->route('admin.projects.show', $project->id)->with('success', 'Progetto aggiornato con successo');

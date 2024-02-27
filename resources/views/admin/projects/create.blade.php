@@ -33,6 +33,16 @@
       <textarea name="description" class="form-control" rows="3"></textarea>
     </div>
 
+    <div class="form-group">
+      <label for="type_id">Tipo</label>
+      <select name="type_id" id="type_id" class="form-control">
+        <option value="" selected>Selezione</option>
+        @foreach($types as $type)
+          <option value="{{ $type->id }}">{{ $type->name }}</option>
+        @endforeach
+      </select>
+    </div>
+
     <button type="submit" class="btn btn-primary">Salva Progetto</button>
   </form>
 </div>

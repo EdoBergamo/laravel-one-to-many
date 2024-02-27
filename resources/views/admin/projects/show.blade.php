@@ -12,6 +12,7 @@
     @if ($project->description)
     <div class="card-body">
       <p class="lead">{{ $project->description }}</p>
+      <p>Type: {{ $project->type->name ?? 'Unknown' }}</p>
     </div>
     @endif
 
